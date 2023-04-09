@@ -1,2 +1,2 @@
-# lumen5_miniurl
+# Miniurl
 Link shortener built for lumen5 take home

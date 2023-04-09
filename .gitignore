@@ -1,0 +1,5 @@
+# air hot reloading
+tmp/
+
+# environment config files
+server/config.yml

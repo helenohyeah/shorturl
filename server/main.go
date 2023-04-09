@@ -11,6 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/helen/lumen5_miniurl/config"
+	"github.com/helen/lumen5_miniurl/handlers"
 )
 
 // Command-line flags.
@@ -45,14 +46,16 @@ func main() {
 	r.Use(middlewares...)
 
 	// Unauthenticated routes
-	// redirect
-	// create short url
+	r.Get("/{shortURL}", handlers.Redirect)
+
+	r.Post("/shorten_url", handlers.CreateShortURL)
 
 	// register
 	// login
+	// update password
 	// logout
 
-	// Authenticated routes
+	// Authenticated
 	// users/{userID}/urls - get urls for user
 
 	server := &http.Server{

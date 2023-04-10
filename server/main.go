@@ -69,16 +69,15 @@ func main() {
 
 	urlHandle := &handlers.URLHandle{DB: &dB}
 	redirectHandle := &handlers.RedirectHandle{DB: &dB}
+	usersHandle := &handlers.UserAccountHandle{DB: &dB}
 
 	// Unauthenticated routes
 	r.Get("/{shortURL}", redirectHandle.Redirect)
 
 	r.Post("/shorten_url", urlHandle.CreateShortURL)
 
-	// register
-	// login
-	// update password
-	// logout
+	r.Post("/register", usersHandle.Register)
+	r.Post("/acct_login", usersHandle.Login)
 
 	// Authenticated
 	// users/{userID}/urls - get urls for user

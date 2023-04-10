@@ -37,15 +37,17 @@ func (db *DB) SeedDB() error {
 		DROP TABLE IF EXISTS users;
 		
 		CREATE TABLE IF NOT EXISTS users (
-			id UUID PRIMARY KEY,
-			username VARCHAR(255) NOT NULL,
+			id SERIAL PRIMARY KEY,
+			username VARCHAR(255) NOT NULL UNIQUE,
 			password CHAR(60) NOT NULL
 		);
+
+		CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
 		
 		CREATE TABLE IF NOT EXISTS urls (
 			id BIGSERIAL PRIMARY KEY,
 			redirect_url TEXT NOT NULL,
-			user_id UUID,
+			user_id int,
 
 			CONSTRAINT fk_urls_user_id FOREIGN KEY (user_id)
 				REFERENCES users (id) MATCH SIMPLE

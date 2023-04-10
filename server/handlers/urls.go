@@ -2,20 +2,21 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
+	"github.com/helen/lumen5_miniurl/db"
 	"github.com/helen/lumen5_miniurl/models"
 	"github.com/helen/lumen5_miniurl/utils"
 	"github.com/rs/zerolog/log"
 )
 
-// type URLHandle struct {
-// }
+type URLHandle struct {
+	DB *db.DB
+}
 
 var data map[int]models.URL
 
-func CreateShortURL(w http.ResponseWriter, r *http.Request) {
+func (h *URLHandle) CreateShortURL(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		OriginalURL string `json:"originalUrl"`
 	}
@@ -40,14 +41,22 @@ func CreateShortURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(longURL)
-	// generate a 7 alphanumeric short url
-	// check if it exists
-	// create in DB
+	sqlStatement := `
+		INSERT INTO urls (redirect_url)
+		VALUES ($1)
+		RETURNING id, redirect_url, user_id
+	`
+	url := models.URL{}
+	if err = h.DB.QueryRow(sqlStatement, longURL).Scan(&url.ID, &url.RedirectURL, &url.UserID); err != nil {
+		log.Error().Err(err).Msg("CreateShortURL - failed to write to DB")
+		utils.WriteJSONError(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	url.EncodedURL = utils.ToBase62(url.ID)
 
 	utils.WriteJSON(w, struct {
-		Data string `json:"data"`
+		Data models.URL `json:"data"`
 	}{
-		Data: longURL,
+		Data: url,
 	})
 }

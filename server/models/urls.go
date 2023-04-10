@@ -1,10 +1,11 @@
 package models
 
-import "time"
+import "database/sql"
 
 // URL represents entity in urls table
 type URL struct {
-	ID          uint64    `db:"id"`
-	RedirectURL string    `db:"redirect_url"`
-	CreatedAt   time.Time `db:"created_at"`
+	ID          uint64         `db:"id" json:"id"`
+	RedirectURL string         `db:"redirect_url" json:"redirectUrl"`
+	UserID      sql.NullString `db:"user_id" json:"userId"`
+	EncodedURL  string         `json:"url"`
 }

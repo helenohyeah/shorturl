@@ -11,6 +11,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/helen/lumen5_miniurl/config"
+	"github.com/helen/lumen5_miniurl/db"
 	"github.com/helen/lumen5_miniurl/handlers"
 )
 
@@ -35,6 +36,27 @@ func main() {
 		log.Error().Err(err).Msgf("Failed to load config file: %v", err)
 	}
 
+	// Connect to redis
+	// rdb := store.InitializeStore()
+	// defer func() {
+	// 	// Close Redis Pool when the app exited
+	// 	if err := rdb.RedisDB.Close(); err != nil {
+	// 		log.Error().Err(err).Msg("Error closing redis")
+	// 	}
+	// }()
+
+	dB := db.DB{}
+	dB.Connect(*cfg)
+	defer func() {
+		// Close DB when app exits
+		if err := dB.DB.Close(); err != nil {
+			log.Error().Err(err).Msg("Error closing DB connection")
+		}
+	}()
+	if err := dB.SeedDB(); err != nil {
+		log.Error().Err(err).Msg("Error seeding db")
+	}
+
 	log.Info().Msg("Setting up routes...")
 
 	r := chi.NewRouter()
@@ -45,10 +67,13 @@ func main() {
 	}
 	r.Use(middlewares...)
 
-	// Unauthenticated routes
-	r.Get("/{shortURL}", handlers.Redirect)
+	urlHandle := &handlers.URLHandle{DB: &dB}
+	redirectHandle := &handlers.RedirectHandle{DB: &dB}
 
-	r.Post("/shorten_url", handlers.CreateShortURL)
+	// Unauthenticated routes
+	r.Get("/{shortURL}", redirectHandle.Redirect)
+
+	r.Post("/shorten_url", urlHandle.CreateShortURL)
 
 	// register
 	// login

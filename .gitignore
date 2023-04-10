@@ -1,5 +1,28 @@
+#############
+# server 
+#############
+
 # air hot reloading
 tmp/
 
 # environment config files
 server/config.yml
+
+#############
+# frontend 
+#############
+
+# dependencies
+ui/node_modules
+ui/.pnp
+ui.pnp.js
+
+# testing
+ui/coverage
+
+# production
+ui/build
+
+# misc
+ui.DS_Store
+npm-debug.log*

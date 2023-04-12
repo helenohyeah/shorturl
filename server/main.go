@@ -55,9 +55,10 @@ func main() {
 			log.Error().Err(err).Msg("Error closing DB connection")
 		}
 	}()
-	if err := dB.SeedDB(); err != nil {
-		log.Error().Err(err).Msg("Error seeding db")
-	}
+	// Todo: move to migrations, comment to stop reseeding when server restarts
+	// if err := dB.SeedDB(); err != nil {
+	// 	log.Error().Err(err).Msg("Error seeding db")
+	// }
 
 	log.Info().Msg("Setting up routes...")
 
@@ -82,7 +83,7 @@ func main() {
 	r.Post("/acct_login", usersHandle.Login)
 
 	// Authenticated
-	// users/{userID}/urls - get urls for user
+	r.Get("/urls_user/{userID}", urlHandle.GetURLsByUserID)
 
 	var handler http.Handler = r
 	if cfg.IsDevEnv() {

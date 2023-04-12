@@ -1,9 +1,12 @@
 import useActions from 'scripts/hooks/useActions';
+import { of } from 'await-of';
+import * as API from 'request';
 
 const types = {
     HOME_PAGE_ON_RESET_UI: 'HOME_PAGE_ON_RESET_UI',
     HOME_PAGE_FORM_CHANGE: 'HOME_PAGE_FORM_CHANGE',
-    HOME_PAGE_SHORTEN_URL: 'HOME_PAGE_SHORTEN_URL',
+    HOME_PAGE_SHORTEN_URL_SUCCESS: 'HOME_PAGE_SHORTEN_URL_SUCCESS',
+    HOME_PAGE_SHORTEN_URL_ERROR: 'HOME_PAGE_SHORTEN_URL_ERROR',
 };
 
 const initialState = {
@@ -11,6 +14,7 @@ const initialState = {
     longUrl: '',
     shortUrl: '',
     redirectUrl: '',
+    error: '',
 };
 
 function reducer(state = initialState, action) {
@@ -26,12 +30,20 @@ function reducer(state = initialState, action) {
             };
         }
 
-        case types.HOME_PAGE_SHORTEN_URL: {
+        case types.HOME_PAGE_SHORTEN_URL_ERROR: {
             return {
                 ...state,
-                shortUrl: action.shortUrl,
+                error: action.error,
+            };
+        }
+
+        case types.HOME_PAGE_SHORTEN_URL_SUCCESS: {
+            return {
+                ...state,
+                shortUrl: action.encodedUrl,
                 longUrl: action.redirectUrl,
                 isShortened: true,
+                error: '',
             };
         }
 
@@ -52,11 +64,27 @@ const actions = {
         value,
     }),
 
-    onShortenUrl: (shortUrl, redirectUrl) => ({
-        type: types.HOME_PAGE_SHORTEN_URL,
-        shortUrl,
-        redirectUrl,
-    }),
+    onShortenUrl: (userId, longUrl) => async dispatch => {
+        const [resp = {}, error] = await of(
+            API.shortenUrl({
+                userId,
+                originalUrl: longUrl,
+            })
+        );
+        if (error) {
+            dispatch({
+                type: types.HOME_PAGE_SHORTEN_URL_ERROR,
+                error,
+            });
+            throw error;
+        }
+        const { data: url = {} } = resp;
+        dispatch({
+            type: types.HOME_PAGE_SHORTEN_URL_SUCCESS,
+            encodedUrl: url.encodedUrl,
+            redirectUrl: url.redirectUrl,
+        });
+    },
 };
 
 const useHomePageActions = () => useActions(actions);

@@ -2,13 +2,34 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"math"
 	"strings"
 )
 
 const (
+	baseURL = "http://localhost:8080"
+	// Offset ID so it appears like a 7 digit alphanumeric
+	// todo: look into mapping sequential ID to a non-sequential number
+	offset       = 107253422234
 	characterSet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 )
+
+// We are going to take ID and multiply it to get a 7 digit base62 number
+// Todo: use another method to avoid sequential urls
+func EncodeURL(num uint64) string {
+	return fmt.Sprintf("%s/%s", baseURL, ToBase62(num+offset))
+}
+
+// DecodeURL
+func DecodeURL(shortURL string) (uint64, error) {
+	num, err := FromBase62(shortURL)
+	if err != nil {
+		return 0, err
+	}
+	id := uint64(num) - 107253422234
+	return id, err
+}
 
 func ToBase62(num uint64) string {
 	encoded := ""

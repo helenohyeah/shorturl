@@ -36,15 +36,6 @@ const AppContainer = ({
                   path: '/register',
                   label: 'Register',
               },
-              // for ease of testing
-              {
-                  path: '/not_found',
-                  label: 'Not found',
-              },
-              {
-                  path: '/anything',
-                  label: 'Anything',
-              },
           ];
 
     return (

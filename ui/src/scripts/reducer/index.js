@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import app from 'scripts/modules/App/reducer/app';
 import login from 'scripts/modules/LoginPage/reducer/loginPage';
 import home from 'scripts/modules/HomePage/reducer/homePage';
+import user from 'scripts/modules/UserPage/reducer/userPage';
 
 function logger({ getState }) {
     return next => action => {
@@ -26,6 +27,7 @@ const store = configureStore({
         login,
         app,
         home,
+        user,
     }),
 });
 

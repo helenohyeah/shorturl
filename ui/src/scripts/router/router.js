@@ -4,7 +4,6 @@ import App from 'scripts/modules/App';
 import HomePage from 'scripts/modules/HomePage';
 import LoginPage from 'scripts/modules/LoginPage';
 import UserPage from 'scripts/modules/UserPage';
-import NotFound from 'scripts/modules/NotFound';
 
 const AppRouter = () => {
     return (
@@ -21,15 +20,6 @@ const AppRouter = () => {
                 />
                 <Route
                     exact
-                    path="/not_found"
-                    render={() => (
-                        <App>
-                            <NotFound />
-                        </App>
-                    )}
-                />
-                <Route
-                    exact
                     path="/login"
                     render={() => (
                         <App>
@@ -37,7 +27,7 @@ const AppRouter = () => {
                         </App>
                     )}
                 />
-                <Route exact path="/logout" render={() => <Redirect to="/" />} />
+                <Route exact path="/logout" render={() => <Redirect />} />
                 <Route
                     exact
                     path="/register"
@@ -52,14 +42,6 @@ const AppRouter = () => {
                     render={() => (
                         <App>
                             <UserPage />
-                        </App>
-                    )}
-                />
-                <Route
-                    path="*"
-                    render={() => (
-                        <App>
-                            <NotFound />
                         </App>
                     )}
                 />

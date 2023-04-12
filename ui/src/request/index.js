@@ -1,4 +1,5 @@
 import request from 'superagent';
+import { format } from 'util';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -6,6 +7,7 @@ const API_ENDPOINTS = {
     shortenUrl: 'shorten_url',
     register: 'register',
     login: 'acct_login',
+    userUrls: 'urls_user/%s',
 };
 
 const getAPIUrl = path => {
@@ -57,5 +59,12 @@ export const shortenUrl = data => {
         method: 'post',
         url: getAPIUrl(API_ENDPOINTS.shortenUrl),
         data,
+    });
+};
+
+export const getUrlsByUserId = userId => {
+    return apiCall({
+        method: 'get',
+        url: format(getAPIUrl(API_ENDPOINTS.userUrls), userId),
     });
 };

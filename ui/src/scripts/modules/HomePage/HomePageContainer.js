@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { of } from 'await-of';
 import { useHomePageActions } from './reducer/homePage';
-import * as API from 'request';
 import HomePage from './components/HomePage';
 
 const getState = state => state.home;
@@ -14,8 +13,7 @@ const HomePageContainer = () => {
     const longUrl = useSelector(state => getState(state).longUrl);
     const shortUrl = useSelector(state => getState(state).shortUrl);
     const userId = useSelector(state => state.app.user.id);
-
-    const [error, setError] = useState();
+    const error = useSelector(state => state.app.error);
 
     const _onChange = name => event => {
         const value = event.target.value;
@@ -26,21 +24,13 @@ const HomePageContainer = () => {
         event.preventDefault();
         event.stopPropagation();
 
-        // todo: validate longUrl looks like a website
-        const [resp = {}, err] = await of(
-            API.shortenUrl({
-                userId,
-                originalUrl: longUrl,
-            })
-        );
+        // todo: validate longUrl looks like a website before sending req
+
+        const [, err] = await of(onShortenUrl(userId, longUrl));
 
         if (err) {
-            setError(err.message);
             throw err;
         }
-        setError();
-        const { data: url = {} } = resp;
-        onShortenUrl(url.shortUrl, url.redirectUrl);
     };
 
     return (

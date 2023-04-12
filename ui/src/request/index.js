@@ -51,3 +51,11 @@ export const login = data => {
         data,
     });
 };
+
+export const shortenUrl = data => {
+    return apiCall({
+        method: 'post',
+        url: getAPIUrl(API_ENDPOINTS.shortenUrl),
+        data,
+    });
+};

@@ -1,48 +1,59 @@
 import React, { useState } from 'react';
-import { CContainer, CRow, CCol, CButton, CForm, CFormLabel, CFormInput } from '@coreui/react';
+import { useSelector } from 'react-redux';
+import { of } from 'await-of';
+import { useHomePageActions } from './reducer/homePage';
+import * as API from 'request';
+import HomePage from './components/HomePage';
 
-export default function HomePageContainer() {
-    const [value, setValue] = useState('');
+const getState = state => state.home;
 
-    const _onChange = event => {
-        setValue(event.target.value);
+const HomePageContainer = () => {
+    const { onFormChange, onShortenUrl, onResetUI } = useHomePageActions();
+
+    const isShortened = useSelector(state => getState(state).isShortened);
+    const longUrl = useSelector(state => getState(state).longUrl);
+    const shortUrl = useSelector(state => getState(state).shortUrl);
+    const userId = useSelector(state => state.app.user.id);
+
+    const [error, setError] = useState();
+
+    const _onChange = name => event => {
+        const value = event.target.value;
+        onFormChange(name, value);
     };
 
-    const _onSubmit = event => {
+    const _onSubmit = async event => {
         event.preventDefault();
         event.stopPropagation();
-        alert('call shorten url api');
+
+        // todo: validate longUrl looks like a website
+        const [resp = {}, err] = await of(
+            API.shortenUrl({
+                userId,
+                originalUrl: longUrl,
+            })
+        );
+
+        if (err) {
+            setError(err.message);
+            throw err;
+        }
+        setError();
+        const { data: url = {} } = resp;
+        onShortenUrl(url.shortUrl, url.redirectUrl);
     };
 
     return (
-        <CContainer fluid>
-            <CRow className="my-4">
-                <p className="fs-4 text-center">Enter the link you want to shorten</p>
-            </CRow>
-            <CRow>
-                <CForm className="row g-3" onSubmit={_onSubmit}>
-                    <CRow className="justify-content-center">
-                        <CCol md={8}>
-                            <CFormLabel htmlFor="shortUrlInput" className="visually-hidden">
-                                Link
-                            </CFormLabel>
-                            <CFormInput
-                                required
-                                id="shortUrlInput"
-                                placeholder="Enter link here"
-                                feedbackInvalid="Please provide a valid link"
-                                value={value}
-                                onChange={_onChange}
-                            />
-                        </CCol>
-                        <CCol xs="auto">
-                            <CButton disabled={!value} type="submit" color="primary">
-                                Shorten url
-                            </CButton>
-                        </CCol>
-                    </CRow>
-                </CForm>
-            </CRow>
-        </CContainer>
+        <HomePage
+            isShortened={isShortened}
+            longUrl={longUrl}
+            shortUrl={shortUrl}
+            error={error}
+            onChange={_onChange}
+            onSubmit={_onSubmit}
+            onShortenAgain={onResetUI}
+        />
     );
-}
+};
+
+export default HomePageContainer;

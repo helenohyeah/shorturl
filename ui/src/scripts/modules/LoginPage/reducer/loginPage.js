@@ -14,6 +14,9 @@ const initialState = {
 
 function reducer(state = initialState, action) {
     switch (action.type) {
+        case types.LOGIN_PAGE_RESET_UI:
+            return initialState;
+
         case types.LOGIN_PAGE_FORM_CHANGE: {
             return {
                 ...state,
@@ -27,9 +30,6 @@ function reducer(state = initialState, action) {
                 isPasswordHidden: !state.isPasswordHidden,
             };
         }
-
-        case types.LOGIN_PAGE_RESET_UI:
-            return initialState;
 
         default: {
             return state;

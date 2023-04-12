@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import login from 'scripts/modules/LoginPage/reducer/loginPage';
 import app from 'scripts/modules/App/reducer/app';
+import login from 'scripts/modules/LoginPage/reducer/loginPage';
+import home from 'scripts/modules/HomePage/reducer/homePage';
 
 function logger({ getState }) {
     return next => action => {
@@ -24,6 +25,7 @@ const store = configureStore({
     reducer: combineReducers({
         login,
         app,
+        home,
     }),
 });
 

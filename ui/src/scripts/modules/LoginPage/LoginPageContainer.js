@@ -46,6 +46,7 @@ const LoginPageContainer = ({ isRegister }) => {
             setError(err.message);
             throw err;
         }
+        setError();
         const { data: user } = resp;
         onLogin(user);
         onResetUI();

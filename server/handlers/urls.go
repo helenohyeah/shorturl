@@ -19,6 +19,7 @@ var data map[int]models.URL
 func (h *URLHandle) CreateShortURL(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		OriginalURL string `json:"originalUrl"`
+		UserID      int64  `json:"userId"`
 	}
 	var req request
 	if err := utils.ReadJSON(r, &req); err != nil {
@@ -41,13 +42,16 @@ func (h *URLHandle) CreateShortURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// todo: validate userID
+	userID := models.NewNullInt64(req.UserID, req.UserID > 0)
+
 	sqlStatement := `
-		INSERT INTO urls (redirect_url)
-		VALUES ($1)
+		INSERT INTO urls (redirect_url, user_id)
+		VALUES ($1, $2)
 		RETURNING id, redirect_url, user_id
 	`
 	url := models.URL{}
-	if err = h.DB.QueryRow(sqlStatement, longURL).Scan(&url.ID, &url.RedirectURL, &url.UserID); err != nil {
+	if err = h.DB.QueryRow(sqlStatement, longURL, userID).Scan(&url.ID, &url.RedirectURL, &url.UserID); err != nil {
 		log.Error().Err(err).Msg("CreateShortURL - failed to write to DB")
 		utils.WriteJSONError(w, err.Error(), http.StatusInternalServerError)
 		return

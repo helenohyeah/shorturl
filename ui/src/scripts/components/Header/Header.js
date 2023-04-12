@@ -3,7 +3,6 @@ import {
     CNavbar,
     CNavbarToggler,
     CNavbarBrand,
-    CNavbarText,
     CCollapse,
     CContainer,
     CNavbarNav,
@@ -27,7 +26,7 @@ const Header = ({ userId, items = [] }) => {
     return (
         <CNavbar expand="md" colorScheme="dark" className="bg-primary">
             <CContainer fluid>
-                <CNavbarBrand href="/" alt="Short url home page" onClick={_onClick('/')}>
+                <CNavbarBrand href="/" alt="Short url home page" onClick={_onClick({ path: '/' })}>
                     ShortURL
                 </CNavbarBrand>
                 {items.length && (

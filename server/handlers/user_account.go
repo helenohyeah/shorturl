@@ -75,9 +75,7 @@ func (h *UserAccountHandle) Register(w http.ResponseWriter, r *http.Request) {
 		Data models.User `json:"data"`
 	}{
 		Data: models.User{
-			ID:       id,
-			Username: req.Username,
-			Password: req.Password,
+			ID: id,
 		},
 	})
 }
@@ -130,9 +128,7 @@ func (h *UserAccountHandle) Login(w http.ResponseWriter, r *http.Request) {
 		Data models.User `json:"data"`
 	}{
 		Data: models.User{
-			ID:       id,
-			Username: req.Username,
-			Password: req.Password,
+			ID: id,
 		},
 	})
 }

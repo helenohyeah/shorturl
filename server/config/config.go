@@ -34,6 +34,10 @@ func (cfg *Config) GetPostgresURL() string {
 	)
 }
 
+func (cfg *Config) IsDevEnv() bool {
+	return cfg.Environment == "development"
+}
+
 func Load(path string) (*Config, error) {
 	p, err := ioutil.ReadFile(path)
 	if err != nil {

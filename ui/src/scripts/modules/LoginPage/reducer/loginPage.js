@@ -1,6 +1,7 @@
 import useActions from 'scripts/hooks/useActions';
 
 const types = {
+    LOGIN_PAGE_RESET_UI: 'LOGIN_PAGE_RESET_UI',
     LOGIN_PAGE_FORM_CHANGE: 'LOGIN_PAGE_FORM_CHANGE',
     LOGIN_PAGE_TOGGLE_SHOW_PASSWORD: 'LOGIN_PAGE_TOGGLE_SHOW_PASSWORD',
 };
@@ -27,6 +28,9 @@ function reducer(state = initialState, action) {
             };
         }
 
+        case types.LOGIN_PAGE_RESET_UI:
+            return initialState;
+
         default: {
             return state;
         }
@@ -34,6 +38,10 @@ function reducer(state = initialState, action) {
 }
 
 const actions = {
+    onResetUI: () => ({
+        type: types.LOGIN_PAGE_RESET_UI,
+    }),
+
     onFormChange: (name, value) => ({
         type: types.LOGIN_PAGE_FORM_CHANGE,
         name,

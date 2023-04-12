@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import App from 'scripts/modules/App';
 import HomePage from 'scripts/modules/HomePage';
 import LoginPage from 'scripts/modules/LoginPage';
@@ -37,6 +37,7 @@ const AppRouter = () => {
                         </App>
                     )}
                 />
+                <Route exact path="/logout" render={() => <Redirect to="/" />} />
                 <Route
                     exact
                     path="/register"

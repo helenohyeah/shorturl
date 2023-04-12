@@ -2,11 +2,13 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/go-chi/chi"
+	ghandlers "github.com/gorilla/handlers"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
@@ -82,13 +84,35 @@ func main() {
 	// Authenticated
 	// users/{userID}/urls - get urls for user
 
+	var handler http.Handler = r
+	if cfg.IsDevEnv() {
+		fmt.Println("setting cors")
+		corsOptions := []ghandlers.CORSOption{
+			ghandlers.AllowedMethods([]string{
+				http.MethodGet,
+				http.MethodPut,
+				http.MethodHead,
+				http.MethodPost,
+				http.MethodDelete,
+				http.MethodOptions,
+			}),
+			ghandlers.AllowedHeaders([]string{
+				"Accept",
+				"Content-Type",
+			}),
+			ghandlers.AllowedOrigins([]string{"http://localhost:3000"}),
+		}
+
+		handler = ghandlers.CORS(corsOptions...)(handler)
+	}
+
 	server := &http.Server{
 		Addr: cfg.ListenAddress,
 		// WriteTimeout:      time.Second * 600,
 		// ReadHeaderTimeout: time.Second * 60,
 		// ReadTimeout:       time.Second * 60,
 		// IdleTimeout:       time.Second * 120,
-		Handler: r,
+		Handler: handler,
 	}
 
 	// Start the HTTP server.

@@ -17,7 +17,7 @@ export default function HomePageContainer() {
     return (
         <CContainer fluid>
             <CRow className="my-4">
-                <p class="fs-4 text-center">Enter the link you want to shorten</p>
+                <p className="fs-4 text-center">Enter the link you want to shorten</p>
             </CRow>
             <CRow>
                 <CForm className="row g-3" onSubmit={_onSubmit}>

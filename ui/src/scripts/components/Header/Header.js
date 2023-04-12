@@ -12,40 +12,16 @@ import {
 } from '@coreui/react';
 import { useHistory } from 'react-router-dom';
 
-const Header = ({ userId }) => {
+const Header = ({ userId, items = [] }) => {
     const history = useHistory();
     const [visible, setVisible] = useState(false);
-    const isLoggedIn = !!userId;
 
-    const navItems = isLoggedIn
-        ? []
-        : [
-              {
-                  path: '/login',
-                  label: 'Login',
-              },
-              {
-                  path: '/register',
-                  label: 'Register',
-              },
-              // for ease of testing
-              {
-                  path: '/u/123',
-                  label: 'User 123',
-              },
-              {
-                  path: '/not_found',
-                  label: 'Not found',
-              },
-              {
-                  path: '/anything',
-                  label: 'Anything',
-              },
-          ];
-
-    const _onClick = path => event => {
+    const _onClick = item => event => {
         event.preventDefault();
-        history.push(path);
+        if (item.onClick) {
+            item.onClick();
+        }
+        history.push(item.path);
     };
 
     return (
@@ -54,8 +30,7 @@ const Header = ({ userId }) => {
                 <CNavbarBrand href="/" alt="Short url home page" onClick={_onClick('/')}>
                     ShortURL
                 </CNavbarBrand>
-                {isLoggedIn && <CNavbarText>{`Logged in as ${userId}`}</CNavbarText>}
-                {navItems.length && (
+                {items.length && (
                     <>
                         <CNavbarToggler
                             aria-label="Toggle navigation"
@@ -64,10 +39,10 @@ const Header = ({ userId }) => {
                         />
 
                         <CCollapse className="navbar-collapse" visible={visible}>
-                            <CNavbarNav>
-                                {navItems.map((item = {}) => (
+                            <CNavbarNav className="me-auto">
+                                {items.map((item = {}) => (
                                     <CNavItem key={item.label}>
-                                        <CNavLink href={item.path} onClick={_onClick(item.path)}>
+                                        <CNavLink href={item.path} onClick={_onClick(item)}>
                                             {item.label}
                                         </CNavLink>
                                     </CNavItem>

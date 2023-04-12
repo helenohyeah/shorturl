@@ -1,74 +1,70 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams,
-} from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import App from 'scripts/modules/App';
+import HomePage from 'scripts/modules/HomePage';
+import LoginPage from 'scripts/modules/LoginPage';
+import UserPage from 'scripts/modules/UserPage';
+import NotFound from 'scripts/modules/NotFound';
 
-const Links = () => {
-  return (
-    <div>
-      <h1>Links</h1>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/u/123">UserId 123</Link>
-        </li>
-        <li>
-          <Link to="/not_found">Not found</Link>
-        </li>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-      </ul>
-    </div>
-  );
-};
-
-const HomePage = () => {
-  const { userId } = useParams();
-  return (
-    <div>
-      <Links />
-      <h1>{userId ? `User page - userId: ${userId}` : `Home page`}</h1>
-    </div>
-  );
-};
-
-const NotFoundPage = () => {
-  return (
-    <div>
-      <Links />
-      <h1>Not found page</h1>
-    </div>
-  );
-};
-
-const LoginPage = () => {
-  return (
-    <div>
-      <Links />
-      <h1>Login page</h1>
-    </div>
-  );
-};
-
-const AppRouter = (props) => {
-  return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route exact path="/not_found" component={NotFoundPage} />
-        <Route exact path="/login" component={LoginPage} />
-        <Route path="/u/:userId" component={HomePage} />
-        <Route path="*" component={NotFoundPage} />
-      </Switch>
-    </Router>
-  );
+const AppRouter = () => {
+    return (
+        <Router>
+            <Switch>
+                <Route
+                    exact
+                    path="/"
+                    render={() => (
+                        <App>
+                            <HomePage />
+                        </App>
+                    )}
+                />
+                <Route
+                    exact
+                    path="/not_found"
+                    render={() => (
+                        <App>
+                            <NotFound />
+                        </App>
+                    )}
+                />
+                <Route
+                    exact
+                    path="/login"
+                    render={() => (
+                        <App>
+                            <LoginPage />
+                        </App>
+                    )}
+                />
+                <Route
+                    exact
+                    path="/register"
+                    render={() => (
+                        <App>
+                            <LoginPage isRegister />
+                        </App>
+                    )}
+                />
+                <Route
+                    path="/u/:userId"
+                    render={() => (
+                        <App>
+                            <UserPage />
+                        </App>
+                    )}
+                />
+                <Route
+                    path="*"
+                    render={() => (
+                        <App>
+                            <NotFound />
+                        </App>
+                    )}
+                />
+            </Switch>
+        </Router>
+    );
 };
 
 export default AppRouter;

@@ -35,6 +35,7 @@ func main() {
 	cfg, err := config.Load(configPath)
 	if err != nil {
 		log.Error().Err(err).Msgf("Failed to load config file: %v", err)
+		os.Exit(1)
 	}
 
 	// Connect to redis
@@ -47,7 +48,10 @@ func main() {
 	// }()
 
 	dB := db.DB{}
-	dB.Connect(*cfg)
+	if err := dB.Connect(*cfg); err != nil {
+		log.Error().Err(err).Msg("Failed to load connect to DB")
+		os.Exit(1)
+	}
 	defer func() {
 		// Close DB when app exits
 		if err := dB.DB.Close(); err != nil {
@@ -57,6 +61,7 @@ func main() {
 	// Todo: move to migrations, comment to stop reseeding when server restarts
 	if err := dB.SeedDB(); err != nil {
 		log.Error().Err(err).Msg("Error seeding db")
+		os.Exit(1)
 	}
 
 	log.Info().Msg("Setting up routes...")

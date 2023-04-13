@@ -12,8 +12,8 @@ const HomePageContainer = () => {
     const isShortened = useSelector(state => getState(state).isShortened);
     const longUrl = useSelector(state => getState(state).longUrl);
     const shortUrl = useSelector(state => getState(state).shortUrl);
+    const error = useSelector(state => getState(state).error);
     const userId = useSelector(state => state.app.user.id);
-    const error = useSelector(state => state.app.error);
 
     const _onChange = name => event => {
         const value = event.target.value;

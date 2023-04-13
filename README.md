@@ -32,6 +32,7 @@ Note: Postgresql BIGSERIAL has a range of 1 to 9223372036854775807
 Frontend:
 
 - React was used because its the frontend framework I'm most comfortable using
+- CoreUI for frontend component framework to build a polished looking and responsive MVP
 
 Backend:
 

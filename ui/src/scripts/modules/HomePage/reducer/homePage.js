@@ -74,7 +74,7 @@ const actions = {
         if (error) {
             dispatch({
                 type: types.HOME_PAGE_SHORTEN_URL_ERROR,
-                error,
+                error: error.message,
             });
             throw error;
         }

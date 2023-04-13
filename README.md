@@ -1,18 +1,23 @@
 ## Short url
 
----
-
 A link shortener service built with Golang and React
 
-## Features:
+Table of contents
 
-- Shorten a long url into a unique 7 character short url
-- Opening the short url will redirect to the long url
-- Visitors can register and login to see the urls they created
+- [Demo](https://github.com/helenohyeah/shorturl#demo)
+- [Data model](https://github.com/helenohyeah/shorturl#data-model)
+- [Technologies & tools](https://github.com/helenohyeah/shorturl#technologies-and-tools-used--would-use)
+- [Technical complexities](https://github.com/helenohyeah/shorturl#technical-complexities)
+- [Traffic spike scenario](https://github.com/helenohyeah/shorturl#traffic-spike-scenario)
+- [How to run locally](https://github.com/helenohyeah/shorturl#how-to-run-locally)
+
+---
+
+## Demo
 
 ![url shortener demo](./docs/demo.gif)
 
-### Data model
+## Data model
 
 Here's a look at what I have in mind for the database schema. We first start with the users and urls table and later look at adding in separate table to track analytics for each url
 
@@ -22,7 +27,7 @@ Note: Postgresql BIGSERIAL has a range of 1 to 9223372036854775807
 
 ---
 
-## Technologies used / would use if given more time
+## Technologies and tools used / would use
 
 Frontend:
 
@@ -54,7 +59,7 @@ Infrastructure / Ops
 
 ---
 
-## Areas with technical complexities
+## Technical complexities
 
 ### URL uniqueness
 

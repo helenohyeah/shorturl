@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -56,9 +55,9 @@ func main() {
 		}
 	}()
 	// Todo: move to migrations, comment to stop reseeding when server restarts
-	// if err := dB.SeedDB(); err != nil {
-	// 	log.Error().Err(err).Msg("Error seeding db")
-	// }
+	if err := dB.SeedDB(); err != nil {
+		log.Error().Err(err).Msg("Error seeding db")
+	}
 
 	log.Info().Msg("Setting up routes...")
 
@@ -87,7 +86,6 @@ func main() {
 
 	var handler http.Handler = r
 	if cfg.IsDevEnv() {
-		fmt.Println("setting cors")
 		corsOptions := []ghandlers.CORSOption{
 			ghandlers.AllowedMethods([]string{
 				http.MethodGet,

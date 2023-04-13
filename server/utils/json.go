@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -60,8 +59,6 @@ func WriteJSONError(w http.ResponseWriter, errMsg string, status int) {
 func WriteJSON(w http.ResponseWriter, v interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	result, _ := json.Marshal(v)
-	fmt.Println(string(result))
 	if err := json.NewEncoder(w).Encode(v); err != nil {
 		log.Error().Err(err).Interface("response", v).Msg("failed to encode json")
 	}
